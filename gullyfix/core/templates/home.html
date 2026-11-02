@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>GullyFix - Lucknow Smart City</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+<style>@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;700;900&display=swap'); body{font-family:'Poppins',sans-serif}</style>
+</head>
+<body class="bg-[#0f0f0f] text-white">
+
+<!-- TOP NAVBAR -->
+<nav class="bg-[#1a1a1a] border-b border-gray-800 px-4 lg:px-8 py-3 flex justify-between items-center sticky top-0 z-[1000]">
+<div class="flex items-center gap-3">
+<div class="bg-gradient-to-br from-orange-400 to-red-600 w-10 h-10 rounded-xl flex items-center justify-center font-black">GF</div>
+<h1 class="font-black text-xl tracking-tight">Gully<span class="text-orange-500">Fix</span> <span class="text-xs bg-orange-500 text-white px-2 py-1 rounded-full ml-2">LUCKNOW 🚩</span></h1>
+</div>
+<div class="hidden lg:flex gap-6 text-sm font-semibold text-gray-400">
+<a href="/" class="text-white border-b-2 border-orange-500 pb-1"><i class="fa-solid fa-fire"></i> Home</a>
+<a href="/stats/" class="hover:text-white">📊 Stats</a>
+<a href="/leaderboard/" class="hover:text-white">🏆 Leaderboard</a>
+<a href="/contact/" class="hover:text-white">📞 Contact</a>
+</div>
+<div class="flex gap-2">
+<a href="/report/" class="bg-gradient-to-r from-orange-500 to-red-500 px-6 py-2.5 rounded-full font-black text-sm shadow-[0_0_20px_rgba(249,115,22,0.5)] hover:scale-105 transition">+ 🚀 Report Karo</a>
+</div>
+</nav>
+
+<!-- HERO STATS BAR -->
+<div class="bg-gradient-to-r from-[#ff6a00] via-[#ee0979] to-[#ff6a00] p-[1px]">
+<div class="bg-[#0f0f0f] px-6 py-4 flex flex-wrap justify-around text-center">
+<div><p class="text-2xl font-black">127+ 🔥</p><p class="text-[10px] text-gray-400 uppercase tracking-widest">Issues Fixed</p></div>
+<div><p class="text-2xl font-black">4.8 ⭐</p><p class="text-[10px] text-gray-400 uppercase tracking-widest">Rating</p></div>
+<div><p class="text-2xl font-black">Lucknow 💖</p><p class="text-[10px] text-gray-400 uppercase tracking-widest">City Covered</p></div>
+<div><p class="text-2xl font-black">24h ⚡</p><p class="text-[10px] text-gray-400 uppercase tracking-widest">Avg Response</p></div>
+</div>
+</div>
+
+<!-- FILTER PILLS -->
+<!-- FILTER PILLS - AB KAAM KARENGE -->
+<div class="px-6 py-3 bg-[#1a1a1a] flex gap-3 overflow-x-auto text-xs scrollbar-hide">
+<a href="/" class="px-4 py-2 rounded-full font-bold whitespace-nowrap {% if not active_cat %}bg-white text-black{% else %}bg-[#2a2a2a] border border-gray-700 hover:bg-gray-700{% endif %}">✨ All Issues</a>
+<a href="/?category=Pothole" class="px-4 py-2 rounded-full whitespace-nowrap {% if active_cat == 'Pothole' %}bg-white text-black font-bold{% else %}bg-[#2a2a2a] border border-gray-700 hover:bg-gray-700{% endif %}">🕳️ Potholes</a>
+<a href="/?category=Garbage" class="px-4 py-2 rounded-full whitespace-nowrap {% if active_cat == 'Garbage' %}bg-white text-black font-bold{% else %}bg-[#2a2a2a] border border-gray-700 hover:bg-gray-700{% endif %}">🗑️ Garbage</a>
+<a href="/?category=Light" class="px-4 py-2 rounded-full whitespace-nowrap {% if active_cat == 'Light' %}bg-white text-black font-bold{% else %}bg-[#2a2a2a] border border-gray-700 hover:bg-gray-700{% endif %}">💡 Lights</a>
+<a href="/?category=Water" class="px-4 py-2 rounded-full whitespace-nowrap {% if active_cat == 'Water' %}bg-white text-black font-bold{% else %}bg-[#2a2a2a] border border-gray-700 hover:bg-gray-700{% endif %}">💧 Water</a>
+<a href="/?category=Dog" class="px-4 py-2 rounded-full whitespace-nowrap {% if active_cat == 'Dog' %}bg-white text-black font-bold{% else %}bg-[#2a2a2a] border border-gray-700 hover:bg-gray-700{% endif %}">🐶 Stray Dogs</a>
+</div>
+
+<div class="flex flex-col lg:flex-row h-[650px]">
+<!-- MAP DARK THEME -->
+<div id="map" class="flex-1 lg:w-3/5 grayscale-[0.2] contrast-[1.1]"></div>
+
+<!-- RIGHT FEED -->
+<div class="lg:w-2/5 bg-[#141414] p-4 overflow-y-auto border-l border-gray-800">
+<div class="flex justify-between items-center mb-4">
+<h3 class="font-black">🔴 Live Feed - Lucknow</h3>
+<span class="text-[10px] bg-green-500 text-black px-2 py-1 rounded-full font-bold animate-pulse">● LIVE</span>
+</div>
+
+{% for i in issues %}
+<div class="bg-[#1f1f1f] border border-gray-800 rounded-2xl p-3 mb-4 hover:border-orange-500/50 hover:bg-[#242424] transition group">
+<div class="flex gap-3">
+<img src="{{ i.image.url }}" class="w-24 h-24 rounded-xl object-cover group-hover:scale-105 transition">
+<div class="flex-1">
+<div class="flex justify-between">
+<h4 class="font-bold text-sm">{{ i.title }} <span class="text-xs">📍</span></h4>
+<span class="text-[10px]">❤️ 12</span>
+</div>
+<p class="text-[11px] text-gray-400 mt-1 line-clamp-2">{{ i.description }}</p>
+<div class="flex gap-2 mt-3">
+<span class="text-[9px] px-2.5 py-1 rounded-full font-bold bg-red-500/20 text-red-400 border border-red-500/30">🚨 {{ i.status }}</span>
+<span class="text-[9px] px-2.5 py-1 rounded-full bg-[#2a2a2a]">🕒 2h ago</span>
+<span class="text-[9px] px-2.5 py-1 rounded-full bg-[#2a2a2a]">👁️ 234</span>
+</div>
+</div>
+</div>
+<a href="/issue/{{ i.id }}/" class="block text-center mt-3 bg-white text-black text-xs font-black py-2 rounded-full group-hover:bg-orange-500 group-hover:text-white transition">View Details →</a>
+</div>
+{% empty %}
+<div class="text-center py-20">
+<p class="text-5xl">🗺️</p>
+<p class="mt-4 font-bold">Koi issue nahi hai abhi!</p>
+<p class="text-xs text-gray-500 mt-1">Tu pehla hero ban! 💪</p>
+</div>
+{% endfor %}
+</div>
+</div>
+
+<!-- FOOTER WITH OPTIONS -->
+<footer class="bg-black border-t border-gray-800 py-8 px-6 mt-10">
+<div class="grid grid-cols-2 lg:grid-cols-4 gap-6 text-xs text-gray-400">
+<div>
+<p class="text-orange-500 font-black text-sm">GullyFix 🚀</p>
+<p class="mt-2">Developed by Sweta. Making Lucknow smarter with Nagar Nigam.</p>
+</div>
+<div>
+<p class="text-white font-bold">Quick Links</p>
+<a href="/" class="block mt-2 hover:text-white">Home</a>
+<a href="/report/" class="block hover:text-white">Report Issue</a>
+<a href="/contact/" class="block hover:text-white">Contact Developer</a>
+</div>
+<div>
+<p class="text-white font-bold">Contact</p>
+<p class="mt-2">📍 Hazratganj, Lucknow</p>
+<p>📧 sweta.gullyfix@gmail.com</p>
+<p>📱 +91 9795XX XXXX</p>
+</div>
+</div>
+<p class="text-center text-[10px] text-gray-600 mt-8">© 2026 GULLYFIX | MADE BY SWETA | #SmartLucknow</p>
+</footer>
+
+<script>
+var map = L.map('map').setView([26.8467, 80.9462], 13);
+L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}', {
+    attribution: 'Esri Street'
+}).addTo(map);
+{% for i in issues %}
+L.marker([{{ i.latitude }}, {{ i.longitude }}]).addTo(map).bindPopup("<b style='color:black'>{{ i.title }}</b>");
+{% endfor %}
+</script>
+</body></html>

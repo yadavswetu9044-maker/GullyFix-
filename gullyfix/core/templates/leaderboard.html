@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script src="https://cdn.tailwindcss.com"></script>
+<title>Leaderboard - GullyFix</title>
+</head>
+<body class="bg-[#0f0f0f] text-white p-6 font-sans">
+<a href="/" class="text-orange-500 font-bold">← Back to Home</a>
+<h1 class="text-3xl font-black mt-6">🏆 Top Contributors - Lucknow</h1>
+<p class="text-gray-400 mt-2">Users who reported the most civic issues</p>
+<div class="mt-8 space-y-3 max-w-2xl">
+<div class="bg-gradient-to-r from-yellow-400 to-orange-500 text-black p-4 rounded-xl font-bold flex justify-between">
+<span>#1 - Aman Singh</span><span>34 Issues Reported</span>
+</div>
+<div class="bg-[#1a1a1a] border border-gray-800 p-4 rounded-xl flex justify-between">
+<span>#2 - {{ request.user.username }} (You)</span><span>1 Issue</span>
+</div>
+<div class="bg-[#1a1a1a] border border-gray-800 p-4 rounded-xl flex justify-between">
+<span>#3 - Priya Sharma</span><span>12 Issues</span>
+</div>
+</div>
+</body>
+</html>

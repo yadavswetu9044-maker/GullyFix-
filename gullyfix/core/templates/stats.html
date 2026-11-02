@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html>
+<head><script src="https://cdn.tailwindcss.com"></script><title>Stats</title></head>
+<body class="bg-[#0f0f0f] text-white p-6">
+<a href="/" class="text-orange-500 font-bold">← Back to Home</a>
+<h1 class="text-3xl font-black mt-6">Platform Statistics</h1>
+<div class="grid grid-cols-3 gap-4 mt-8 max-w-3xl">
+<div class="bg-[#1a1a1a] p-6 rounded-2xl text-center border border-gray-800"><p class="text-4xl font-black text-orange-500">{{total}}</p><p class="text-xs text-gray-400 mt-2">TOTAL REPORTS</p></div>
+<div class="bg-[#1a1a1a] p-6 rounded-2xl text-center border border-gray-800"><p class="text-4xl font-black text-red-500">{{pending}}</p><p class="text-xs text-gray-400 mt-2">PENDING</p></div>
+<div class="bg-[#1a1a1a] p-6 rounded-2xl text-center border border-gray-800"><p class="text-4xl font-black text-green-500">{{fixed}}</p><p class="text-xs text-gray-400 mt-2">RESOLVED</p></div>
+</div>
+</body>
+</html>

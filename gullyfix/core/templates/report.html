@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html><head><title>Report Karo - GullyFix</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+</head>
+<body class="bg-orange-50">
+<nav class="bg-white shadow px-6 py-3 flex justify-between">
+<a href="/" class="font-black">Gully<span class="text-orange-500">Fix</span> 🚧</a>
+<a href="/" class="text-sm">← Back to Home</a>
+</nav>
+
+<div class="max-w-2xl mx-auto bg-white p-8 rounded-2xl shadow-xl mt-8">
+<h1 class="text-2xl font-black mb-1">📸 Naya Issue Report Karo</h1>
+<p class="text-gray-500 text-sm mb-6">Photo + Location = 2 min me kaam ho jayega!</p>
+
+<form method="POST" enctype="multipart/form-data">
+{% csrf_token %}
+<label class="font-bold text-sm">📝 Title kya hai?</label>
+<input name="title" placeholder="Ex: Bhiatuli me kude ka dher 🗑️" class="w-full border-2 border-gray-200 focus:border-orange-500 p-3 rounded-xl mb-4 outline-none" required>
+
+<label class="font-bold text-sm">🗣️ Thoda detail batao</label>
+<textarea name="description" placeholder="Kab se hai? Kitna bada hai?" class="w-full border-2 border-gray-200 p-3 rounded-xl mb-4" required></textarea>
+
+<div class="grid grid-cols-2 gap-4">
+<div>
+<label class="font-bold text-sm">🏷️ Category</label>
+<select name="category" class="w-full border-2 p-3 rounded-xl mb-4">
+{% for c in cats %}<option value="{{c.id}}">{{c.name}}</option>{% endfor %}
+</select>
+</div>
+<div>
+<label class="font-bold text-sm">📷 Photo Upload</label>
+<input type="file" name="image" class="w-full border-2 p-2 rounded-xl mb-4" required>
+</div>
+</div>
+
+<label class="font-bold text-sm">🗺️ Location Pin Karo (Map pe click karo) 👇</label>
+<div id="map" class="h-72 w-full rounded-xl border-2 border-orange-200 mb-3"></div>
+
+<div class="flex gap-2">
+<input id="lat" name="latitude" value="26.8467" class="w-1/2 bg-gray-100 border p-3 rounded-xl text-sm" readonly required>
+<input id="lng" name="longitude" value="80.9462" class="w-1/2 bg-gray-100 border p-3 rounded-xl text-sm" readonly required>
+</div>
+
+<button class="w-full bg-gradient-to-r from-orange-500 to-red-500 text-white p-4 mt-6 rounded-xl font-black text-lg shadow-lg hover:scale-[1.02] transition">🚀 Submit Karo - Fix Karayenge!</button>
+</form>
+</div>
+
+<script>
+var map = L.map('map').setView([26.8467, 80.9462], 12);
+L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}').addTo(map);
+var marker;
+map.on('click', function(e){
+    if(marker) map.removeLayer(marker);
+    marker = L.marker(e.latlng).addTo(map).bindPopup("📍 Yaha ka issue!").openPopup();
+    document.getElementById('lat').value = e.latlng.lat;
+    document.getElementById('lng').value = e.latlng.lng;
+});
+</script>
+</body></html>

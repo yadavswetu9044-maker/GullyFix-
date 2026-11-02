@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script src="https://cdn.tailwindcss.com"></script>
+<title>Issue Details - GullyFix</title>
+</head>
+<body class="bg-[#0f0f0f] text-white min-h-screen p-4 lg:p-8 font-sans">
+<a href="/" class="inline-block bg-[#1a1a1a] border border-gray-800 px-4 py-2 rounded-full text-sm hover:bg-gray-800">← Back to Map</a>
+
+<div class="max-w-2xl mx-auto mt-6 bg-[#1a1a1a] border border-gray-800 rounded-2xl overflow-hidden">
+{% if issue.image %}
+<img src="{{ issue.image.url }}" class="w-full h-80 object-cover" alt="Issue Image">
+{% else %}
+<div class="w-full h-80 bg-[#2a2a2a] flex items-center justify-center text-gray-500">No Image Uploaded</div>
+{% endif %}
+
+<div class="p-6">
+<div class="flex justify-between items-start">
+<h1 class="text-2xl font-black">{{ issue.title }}</h1>
+<span class="px-3 py-1 rounded-full text-xs font-bold {% if issue.status == 'Fixed' %}bg-green-500 text-black{% else %}bg-red-500 text-white{% endif %}">{{ issue.status }}</span>
+</div>
+
+<p class="text-sm text-gray-400 mt-2">Category: {{ issue.category.name }} | Reported by: {{ issue.user.username }}</p>
+<p class="mt-4 text-gray-200 leading-relaxed">{{ issue.description }}</p>
+
+<div class="mt-6 grid grid-cols-2 gap-4 text-xs">
+<div class="bg-black p-3 rounded-xl border border-gray-800">
+<p class="text-gray-500">LOCATION</p>
+<p class="font-bold mt-1">{{ issue.latitude }}, {{ issue.longitude }}</p>
+</div>
+<div class="bg-black p-3 rounded-xl border border-gray-800">
+<p class="text-gray-500">STATUS</p>
+<p class="font-bold mt-1">{{ issue.status }} - Pending verification by Nagar Nigam</p>
+</div>
+</div>
+
+<a href="/" class="block text-center w-full bg-white text-black font-bold py-3 rounded-xl mt-6 hover:bg-gray-200">Back to Map</a>
+<p class="text-center text-[10px] text-gray-600 mt-4">Developed by Sweta | GullyFix Lucknow</p>
+</div>
+</div>
+</body>
+</html>
